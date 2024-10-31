@@ -32,8 +32,17 @@ namespace MovieApp
             return await _context.ScanAsync<Movie>(conditions).GetRemainingAsync();
         }
 
+        //public async Task<Movie> GetMovieByIdAsync(string id, string movieName)
+        //{
+        //    return await _context.LoadAsync<Movie>(id, movieName);
+        //}
         public async Task<Movie> GetMovieByIdAsync(string id, string movieName)
         {
+            if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(movieName))
+            {
+                throw new ArgumentException("Both movieId and movieName must be provided.");
+            }
+
             return await _context.LoadAsync<Movie>(id, movieName);
         }
 
@@ -81,5 +90,12 @@ namespace MovieApp
 
             return await _context.ScanAsync<Movie>(scanConditions, config).GetRemainingAsync();
         }
+        
+
+
+
+
+
+
     }
 }

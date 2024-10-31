@@ -17,11 +17,24 @@ namespace MovieApp.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(string genre, double? rating)
         {
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
+
+            if (!string.IsNullOrWhiteSpace(genre))
+            {
+                movies = movies.Where(m => m.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (rating.HasValue)
+            {
+                movies = movies.Where(m => m.Rating >= rating.Value).ToList();
+            }
+
             return View(movies);
         }
+
 
         public async Task<IActionResult> Download(string movieId)
         {
@@ -98,6 +111,37 @@ namespace MovieApp.Controllers
                     await _s3Client.UploadMovieFileAsync(movie.MovieId, stream);
                 }
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, string userId)
+        {
+            if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieName))
+            {
+                return BadRequest("Comment content, User ID, and Movie Name are required.");
+            }
+
+            var movie = await _dynamoDbClient.GetMovieByIdAsync(movieId, movieName);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            // Create a new comment
+            var comment = new Comment
+            {
+                CommentId = Guid.NewGuid().ToString(),
+                Content = content,
+                Timestamp = DateTime.UtcNow,
+                UserId = userId
+            };
+
+            movie.Comments.Add(comment);
+
+            // Update the movie in DynamoDB
+            await _dynamoDbClient.UpdateMovieAsync(movie);
 
             return RedirectToAction("Index");
         }

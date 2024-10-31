@@ -53,6 +53,13 @@
                             </li>
                         }
                     </ul>
+                    <form asp-action="AddComment" method="post">
+                        <input type="hidden" name="movieId" value="@movie.MovieId" />
+                        <input type="hidden" name="movieName" value="@movie.MovieName" />
+                        <input type="text" name="content" placeholder="Add a comment" required />
+                        <input type="text" name="userId" placeholder="Your name" required />
+                        <button type="submit">Add Comment</button>
+                    </form>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@movie.MovieId" asp-route-movieName="@movie.MovieName" class=" btn btn-edit">Edit</a>
@@ -173,3 +180,11 @@
         cursor: pointer;
     }
 </style>
+
+<script>
+    document.getElementById("filterForm").onsubmit = function () {
+        // Let the form submit normally, this will take care of filtering
+        return true;
+    };
+</script>
+

@@ -101,5 +101,17 @@ namespace MovieApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // Delete movie
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id, string movieName)
+        {
+            // Delete the movie record from DynamoDB
+            await _dynamoDbClient.DeleteMovieAsync(id, movieName);
+            // Deelete movie in Bucket s3
+            await _s3Client.DeleteMovieFileAsync(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

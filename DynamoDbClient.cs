@@ -46,9 +46,9 @@ namespace MovieApp
             await _context.SaveAsync(movie);
         }
 
-        public async Task DeleteMovieAsync(int id)
+        public async Task DeleteMovieAsync(string id, string movieName)
         {
-            await _context.DeleteAsync<Movie>(id);
+            await _context.DeleteAsync<Movie>(id, movieName);
         }
     }
 }

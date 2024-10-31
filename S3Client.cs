@@ -44,5 +44,16 @@ namespace MovieApp
 
             await _s3Client.PutObjectAsync(uploadRequest);
         }
+
+        public async Task DeleteMovieFileAsync(string movieId)
+        {
+            var deleteObjectRequest = new DeleteObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = $"{movieId}.mp4"
+            };
+
+            await _s3Client.DeleteObjectAsync(deleteObjectRequest);
+        }
     }
 }

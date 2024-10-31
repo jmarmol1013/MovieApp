@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Movie>
+
+<h1>Movie List</h1>
+
+<table class="movie-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Director</th>
+            <th>Release Date</th>
+            <th>Added By</th>
+            <th>Rating</th>
+            <th>Comments</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in Model)
+        {
+            <tr>
+                <td>@movie.MovieName</td>
+                <td>@movie.Genre</td>
+                <td>@movie.Director</td>
+                <td>@movie.ReleaseDate.ToString("MMMM dd, yyyy")</td>
+                <td>@movie.AddedBy</td>
+                <td>@movie.Rating</td>
+                <td>
+                    <ul>
+                        @foreach (var comment in movie.Comments)
+                        {
+                            <li>
+                                <strong>@comment.UserId:</strong> @comment.Content
+                                <span> - @comment.Timestamp.ToString("g")</span>
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@movie.MovieId" asp-route-movieName="@movie.MovieName" class=" btn btn-edit">Edit</a>
+                    <a href="@Url.Action("Download", "Movies", new { movieId = movie.MovieId })" class="btn btn-primary">Donwload</a>
+                    <a href="/Movies/Delete/@movie.MovieId" class="btn btn-delete">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="add-movie">
+    <a asp-controller="Movies" class="btn btn-add" asp-action="Add">Add New Movie</a>
+</div>
+
+<!-- Styling -->
+<style>
+
+    .movie-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .movie-table th, .movie-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .movie-table th {
+            background-color: #f4f4f4;
+        }
+
+    ul {
+        padding-left: 20px;
+        list-style-type: disc;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .btn-edit {
+        background-color: #4CAF50;
+    }
+
+    .btn-delete {
+        background-color: #f44336;
+    }
+
+    .btn-add {
+        display: inline-block;
+        margin-top: 10px;
+        background-color: #2196F3;
+    }
+</style>

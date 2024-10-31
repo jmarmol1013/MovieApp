@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "9kJ0GYOR0ZUoKyOq1cw1XiED7TTnO6oncMrKHJWNlLxcN4R39LHtMz9+1y2XY61S5YomqefRSbTuSB4SESdPjA==",
+  "dgSpecHash": "FBOM0DTj6JESzMpWcnKy7AF0iD21/gysCi7Xk7n5yYxtLOUMiL/A278Tke1XfF8nWOvq0SJw2DLhz/1ZkAI2eg==",
   "success": true,
   "projectFilePath": "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.core\\3.7.400.41\\awssdk.core.3.7.400.41.nupkg.sha512",
+    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.402.5\\awssdk.dynamodbv2.3.7.402.5.nupkg.sha512",
+    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.s3\\3.7.405.5\\awssdk.s3.3.7.405.5.nupkg.sha512",
+    "C:\\Users\\camilo\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.1\\system.configuration.configurationmanager.8.0.1.nupkg.sha512",
+    "C:\\Users\\camilo\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.1\\system.diagnostics.eventlog.8.0.1.nupkg.sha512",
+    "C:\\Users\\camilo\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

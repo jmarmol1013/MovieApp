@@ -113,5 +113,17 @@ namespace MovieApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> IndexByRating(int minRating)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByRatingAsync(minRating);
+            return View("Index", movies);
+        }
+
+        public async Task<IActionResult> IndexByGenre(string genre)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByGenreAsync(genre);
+            return View("Index", movies);
+        }
     }
 }

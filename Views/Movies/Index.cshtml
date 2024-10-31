@@ -1,7 +1,25 @@
 ﻿@model IEnumerable<Movie>
 
 <h1>Movie List</h1>
+<div class="filter-container">
+    <form method="get" action="/Movies/IndexByRating" class="filter-form">
+        <label>Minimum Rating:</label>
+        <input type="number" name="minRating" value="9" min="0" max="10" />
+        <button type="submit" class="submit-btn">Filter by Rating</button>
+    </form>
 
+    <form method="get" action="/Movies/IndexByGenre" class="filter-form">
+        <label>Genre:</label>
+        <input type="text" name="genre" />
+        <button type="submit" class="submit-btn">Filter by Genre</button>
+    </form>
+</div>
+
+<div class="global-reset">
+    <form method="get" action="/Movies">
+        <button type="submit" class="global-reset-btn">Reset All Filters</button>
+    </form>
+</div>
 <table class="movie-table">
     <thead>
         <tr>
@@ -54,21 +72,21 @@
 
 <!-- Styling -->
 <style>
-
     .movie-table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
+        margin-top: 30px
     }
 
-        .movie-table th, .movie-table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
+    .movie-table th, .movie-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
 
-        .movie-table th {
-            background-color: #f4f4f4;
-        }
+    .movie-table th {
+        background-color: #f4f4f4;
+    }
 
     ul {
         padding-left: 20px;
@@ -94,5 +112,64 @@
         display: inline-block;
         margin-top: 10px;
         background-color: #2196F3;
+    }
+
+    .filter-container {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        width: 35%; 
+    }
+
+        .filter-form label {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .filter-form input[type="number"],
+        .filter-form input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+    .submit-btn {
+        padding: 10px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .submit-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .global-reset {
+        display: flex;
+        justify-content: left;
+        margin-top: 16px;
+    }
+
+    .global-reset-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
     }
 </style>

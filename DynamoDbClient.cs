@@ -6,6 +6,7 @@ using System.Configuration;
 using Amazon;
 using ConfigurationManager = System.Configuration.ConfigurationManager;
 using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace MovieApp
 {
@@ -49,6 +50,36 @@ namespace MovieApp
         public async Task DeleteMovieAsync(string id, string movieName)
         {
             await _context.DeleteAsync<Movie>(id, movieName);
+        }
+
+        public async Task<List<Movie>> GetMoviesByRatingAsync(int minRating)
+        {
+            var config = new DynamoDBOperationConfig
+            {
+                IndexName = "rating-genre-index",
+            };
+
+            var scanConditions = new List<ScanCondition>
+            {
+                new ScanCondition("Rating", ScanOperator.GreaterThan, minRating)
+            };
+
+            return await _context.ScanAsync<Movie>(scanConditions, config).GetRemainingAsync();
+        }
+
+        public async Task<List<Movie>> GetMoviesByGenreAsync(string genre)
+        {
+            var config = new DynamoDBOperationConfig
+            {
+                IndexName = "genre-rating-index",
+            };
+
+            var scanConditions = new List<ScanCondition>
+            {
+                new ScanCondition("Genre", ScanOperator.Equal, genre)
+            };
+
+            return await _context.ScanAsync<Movie>(scanConditions, config).GetRemainingAsync();
         }
     }
 }

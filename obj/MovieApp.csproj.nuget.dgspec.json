@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\MovieApp.csproj": {}
+    "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\MovieApp.csproj": {
+    "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\MovieApp.csproj",
+        "projectUniqueName": "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj",
         "projectName": "MovieApp",
-        "projectPath": "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\MovieApp.csproj",
-        "packagesPath": "C:\\Users\\ariel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\obj\\",
+        "projectPath": "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj",
+        "packagesPath": "C:\\Users\\camilo\\.nuget\\packages\\",
+        "outputPath": "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ariel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\camilo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,8 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/centennialcollegecourses/Lab4_ClassLibrary/_packaging/JuanFeed/nuget/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
@@ -35,11 +35,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -86,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

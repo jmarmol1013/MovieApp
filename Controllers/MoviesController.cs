@@ -142,6 +142,10 @@ namespace MovieApp.Controllers
 
             // Update the movie in DynamoDB
             await _dynamoDbClient.UpdateMovieAsync(movie);
+
+            return RedirectToAction("Index");
+        }
+
         // Delete movie
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string movieName)

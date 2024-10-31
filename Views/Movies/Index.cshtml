@@ -1,6 +1,7 @@
-﻿@model IEnumerable<Movie>
+﻿@model MoviesViewModel
 
 <h1>Movie List</h1>
+<h2>Welcome, @Model.Username</h2>
 <div class="filter-container">
     <form method="get" action="/Movies/IndexByRating" class="filter-form">
         <label>Minimum Rating:</label>
@@ -16,7 +17,7 @@
 </div>
 
 <div class="global-reset">
-    <form method="get" action="/Movies">
+    <form method="get" action="/Movies/Index">
         <button type="submit" class="global-reset-btn">Reset All Filters</button>
     </form>
 </div>
@@ -34,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var movie in Model)
+        @foreach (var movie in Model.Movies)
         {
             <tr>
                 <td>@movie.MovieName</td>

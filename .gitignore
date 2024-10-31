@@ -33,6 +33,7 @@ out/
 # AppConfig and Bin folders
 App.Config
 bin/
+appsettings.json
 
 # NuGet Packages
 *.nupkg

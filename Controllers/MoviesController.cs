@@ -32,7 +32,14 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Rating >= rating.Value).ToList();
             }
 
-            return View(movies);
+            string username = TempData["Username"] as string;
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
+
+            return View(viewModel);
         }
 
 

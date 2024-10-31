@@ -142,10 +142,28 @@ namespace MovieApp.Controllers
 
             // Update the movie in DynamoDB
             await _dynamoDbClient.UpdateMovieAsync(movie);
+        // Delete movie
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id, string movieName)
+        {
+            // Delete the movie record from DynamoDB
+            await _dynamoDbClient.DeleteMovieAsync(id, movieName);
+            // Deelete movie in Bucket s3
+            await _s3Client.DeleteMovieFileAsync(id);
 
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> IndexByRating(int minRating)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByRatingAsync(minRating);
+            return View("Index", movies);
+        }
 
+        public async Task<IActionResult> IndexByGenre(string genre)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByGenreAsync(genre);
+            return View("Index", movies);
+        }
     }
 }

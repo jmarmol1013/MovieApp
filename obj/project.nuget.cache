@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "FBOM0DTj6JESzMpWcnKy7AF0iD21/gysCi7Xk7n5yYxtLOUMiL/A278Tke1XfF8nWOvq0SJw2DLhz/1ZkAI2eg==",
+  "dgSpecHash": "UL1sLuTVtg0=",
   "success": true,
-  "projectFilePath": "Z:\\Desktop\\College\\Fall2024\\API\\MovieApp\\MovieApp.csproj",
+  "projectFilePath": "C:\\Users\\ariel\\Source\\Repos\\MovieApp\\MovieApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.core\\3.7.400.41\\awssdk.core.3.7.400.41.nupkg.sha512",
-    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.402.5\\awssdk.dynamodbv2.3.7.402.5.nupkg.sha512",
-    "C:\\Users\\camilo\\.nuget\\packages\\awssdk.s3\\3.7.405.5\\awssdk.s3.3.7.405.5.nupkg.sha512",
-    "C:\\Users\\camilo\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.1\\system.configuration.configurationmanager.8.0.1.nupkg.sha512",
-    "C:\\Users\\camilo\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.1\\system.diagnostics.eventlog.8.0.1.nupkg.sha512",
-    "C:\\Users\\camilo\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+    "C:\\Users\\ariel\\.nuget\\packages\\awssdk.core\\3.7.400.43\\awssdk.core.3.7.400.43.nupkg.sha512",
+    "C:\\Users\\ariel\\.nuget\\packages\\awssdk.dynamodbv2\\3.7.402.5\\awssdk.dynamodbv2.3.7.402.5.nupkg.sha512",
+    "C:\\Users\\ariel\\.nuget\\packages\\awssdk.s3\\3.7.405.7\\awssdk.s3.3.7.405.7.nupkg.sha512",
+    "C:\\Users\\ariel\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.1\\system.configuration.configurationmanager.8.0.1.nupkg.sha512",
+    "C:\\Users\\ariel\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.1\\system.diagnostics.eventlog.8.0.1.nupkg.sha512",
+    "C:\\Users\\ariel\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

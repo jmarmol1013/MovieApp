@@ -18,9 +18,9 @@ namespace MovieApp.Controllers
         }
 
 
-       
 
-        public async Task<IActionResult> Index(string genre, double? rating)
+
+        public async Task<IActionResult> Index(string genre, double? minRating)
         {
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
 
@@ -29,12 +29,12 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            if (rating.HasValue)
+            if (minRating.HasValue)
             {
-                movies = movies.Where(m => m.Rating >= rating.Value).ToList();
+                movies = movies.Where(m => m.Rating >= minRating.Value).ToList();
             }
 
-            string username = HttpContext.Session.GetString("Username"); // Updated
+            string username = HttpContext.Session.GetString("Username");
             var viewModel = new MoviesViewModel
             {
                 Movies = movies,
@@ -156,9 +156,9 @@ namespace MovieApp.Controllers
 
             movie.Comments.Add(comment);
 
-            // Calculate the new average rating
+            
             double averageRating = (double)movie.Comments.Average(c => c.Rating);
-            movie.Rating = Math.Round(averageRating, 1);  // Store the average rating to one decimal place
+            movie.Rating = Math.Round(averageRating, 1);  
 
             // Update the movie in DynamoDB
             await _dynamoDbClient.UpdateMovieAsync(movie);
@@ -173,9 +173,9 @@ namespace MovieApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string movieName)
         {
-            // Delete the movie record from DynamoDB
+            
             await _dynamoDbClient.DeleteMovieAsync(id, movieName);
-            // Deelete movie in Bucket s3
+            
             await _s3Client.DeleteMovieFileAsync(id);
 
             return RedirectToAction("Index");
@@ -187,7 +187,7 @@ namespace MovieApp.Controllers
         public async Task<IActionResult> IndexByRating(int minRating)
         {
             var movies = await _dynamoDbClient.GetMoviesByRatingAsync(minRating);
-            string username = HttpContext.Session.GetString("Username"); // Use session to retrieve the username
+            string username = HttpContext.Session.GetString("Username"); 
 
             var viewModel = new MoviesViewModel
             {
@@ -195,15 +195,17 @@ namespace MovieApp.Controllers
                 Username = username
             };
 
-            return View("Index", viewModel); // Return the MoviesViewModel
+            return View("Index", viewModel); 
         }
+
+
 
 
 
         public async Task<IActionResult> IndexByGenre(string genre)
         {
             var movies = await _dynamoDbClient.GetMoviesByGenreAsync(genre);
-            string username = HttpContext.Session.GetString("Username"); // Use session to retrieve the username
+            string username = HttpContext.Session.GetString("Username"); 
 
             var viewModel = new MoviesViewModel
             {
@@ -211,11 +213,43 @@ namespace MovieApp.Controllers
                 Username = username
             };
 
-            return View("Index", viewModel); // Return the MoviesViewModel
+            return View("Index", viewModel); 
         }
 
+        
 
-  
+        [HttpPost]
+        public async Task<IActionResult> EditComment(string movieId, string movieName, string commentId, string newContent)
+        {
+            if (string.IsNullOrWhiteSpace(newContent))
+            {
+                return BadRequest("Comment content cannot be empty.");
+            }
+
+            var movie = await _dynamoDbClient.GetMovieByIdAsync(movieId, movieName);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var comment = movie.Comments.FirstOrDefault(c => c.CommentId == commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            
+            comment.Content = newContent;
+
+            
+            comment.Timestamp = DateTime.UtcNow; 
+
+            
+            await _dynamoDbClient.UpdateMovieAsync(movie);
+
+            return RedirectToAction("Index");
+        }
+
 
     }
 }

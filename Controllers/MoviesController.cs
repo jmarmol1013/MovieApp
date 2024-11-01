@@ -17,11 +17,9 @@ namespace MovieApp.Controllers
             _logger = logger;
         }
 
-
-
-
         public async Task<IActionResult> Index(string genre, double? minRating)
         {
+            HttpContext.Session.SetString("Username", "juanca1013");
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
 
             if (!string.IsNullOrWhiteSpace(genre))
@@ -44,11 +42,6 @@ namespace MovieApp.Controllers
             return View(viewModel);
         }
 
-
-
-
-
-
         public async Task<IActionResult> Download(string movieId)
         {
             var url = await _s3Client.GetMovieDownloadUrlAsync(movieId);
@@ -64,6 +57,9 @@ namespace MovieApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Movie movie, IFormFile movieFile)
         {
+            string username = HttpContext.Session.GetString("Username");
+            movie.AddedBy = username;
+
             if (ModelState.IsValid)
             {
                 // Add movie to DB
@@ -131,9 +127,9 @@ namespace MovieApp.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, string userId, double rating)
+        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, double rating)
         {
-            if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieName))
+            if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(movieName))
             {
                 return BadRequest("Comment content, User ID, and Movie Name are required.");
             }
@@ -145,6 +141,7 @@ namespace MovieApp.Controllers
             }
 
             // Create a new comment
+            string userId = HttpContext.Session.GetString("Username");
             var comment = new Comment
             {
                 CommentId = Guid.NewGuid().ToString(),
@@ -173,7 +170,6 @@ namespace MovieApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string id, string movieName)
         {
-            
             await _dynamoDbClient.DeleteMovieAsync(id, movieName);
             
             await _s3Client.DeleteMovieFileAsync(id);

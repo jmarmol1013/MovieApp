@@ -19,7 +19,7 @@ namespace MovieApp.Controllers
 
         public async Task<IActionResult> Index(string genre, double? minRating)
         {
-            HttpContext.Session.SetString("Username", "juanca1013");
+           
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
 
             if (!string.IsNullOrWhiteSpace(genre))

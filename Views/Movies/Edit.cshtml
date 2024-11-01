@@ -8,6 +8,7 @@
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="MovieId" />
     <input type="hidden" asp-for="MovieName" />
+    <input type="hidden" asp-for="AddedBy" />
 
     <div>
         <label asp-for="Director"></label>
@@ -27,11 +28,6 @@
     <div>
         <label asp-for="ReleaseDate"></label>
         <input type="date" asp-for="ReleaseDate" required />
-    </div>
-
-    <div>
-        <label for="addedBy">Added By</label>
-        <input type="text" asp-for="AddedBy" required />
     </div>
 
     <div>

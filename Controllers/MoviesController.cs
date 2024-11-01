@@ -17,9 +17,9 @@ namespace MovieApp.Controllers
             _logger = logger;
         }
 
-        
-        public async Task<IActionResult> Index(string genre, double? rating)
+        public async Task<IActionResult> Index(string genre, double? minRating)
         {
+            HttpContext.Session.SetString("Username", "juanca1013");
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
 
             if (!string.IsNullOrWhiteSpace(genre))
@@ -27,14 +27,20 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            if (rating.HasValue)
+            if (minRating.HasValue)
             {
-                movies = movies.Where(m => m.Rating >= rating.Value).ToList();
+                movies = movies.Where(m => m.Rating >= minRating.Value).ToList();
             }
 
-            return View(movies);
-        }
+            string username = HttpContext.Session.GetString("Username");
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
 
+            return View(viewModel);
+        }
 
         public async Task<IActionResult> Download(string movieId)
         {
@@ -51,6 +57,9 @@ namespace MovieApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Movie movie, IFormFile movieFile)
         {
+            string username = HttpContext.Session.GetString("Username");
+            movie.AddedBy = username;
+
             if (ModelState.IsValid)
             {
                 // Add movie to DB
@@ -115,10 +124,12 @@ namespace MovieApp.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, string userId)
+        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, double rating)
         {
-            if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieName))
+            if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(movieName))
             {
                 return BadRequest("Comment content, User ID, and Movie Name are required.");
             }
@@ -130,17 +141,106 @@ namespace MovieApp.Controllers
             }
 
             // Create a new comment
+            string userId = HttpContext.Session.GetString("Username");
             var comment = new Comment
             {
                 CommentId = Guid.NewGuid().ToString(),
                 Content = content,
                 Timestamp = DateTime.UtcNow,
-                UserId = userId
+                UserId = userId,
+                Rating = rating  // Set the rating from the input
             };
 
             movie.Comments.Add(comment);
 
+            
+            double averageRating = (double)movie.Comments.Average(c => c.Rating);
+            movie.Rating = Math.Round(averageRating, 1);  
+
             // Update the movie in DynamoDB
+            await _dynamoDbClient.UpdateMovieAsync(movie);
+
+
+            return RedirectToAction("Index");
+        }
+
+
+
+        // Delete movie
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id, string movieName)
+        {
+            await _dynamoDbClient.DeleteMovieAsync(id, movieName);
+            
+            await _s3Client.DeleteMovieFileAsync(id);
+
+            return RedirectToAction("Index");
+        }
+
+
+        
+
+        public async Task<IActionResult> IndexByRating(int minRating)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByRatingAsync(minRating);
+            string username = HttpContext.Session.GetString("Username"); 
+
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
+
+            return View("Index", viewModel); 
+        }
+
+
+
+
+
+        public async Task<IActionResult> IndexByGenre(string genre)
+        {
+            var movies = await _dynamoDbClient.GetMoviesByGenreAsync(genre);
+            string username = HttpContext.Session.GetString("Username"); 
+
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
+
+            return View("Index", viewModel); 
+        }
+
+        
+
+        [HttpPost]
+        public async Task<IActionResult> EditComment(string movieId, string movieName, string commentId, string newContent)
+        {
+            if (string.IsNullOrWhiteSpace(newContent))
+            {
+                return BadRequest("Comment content cannot be empty.");
+            }
+
+            var movie = await _dynamoDbClient.GetMovieByIdAsync(movieId, movieName);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var comment = movie.Comments.FirstOrDefault(c => c.CommentId == commentId);
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            
+            comment.Content = newContent;
+
+            
+            comment.Timestamp = DateTime.UtcNow; 
+
+            
             await _dynamoDbClient.UpdateMovieAsync(movie);
 
             return RedirectToAction("Index");

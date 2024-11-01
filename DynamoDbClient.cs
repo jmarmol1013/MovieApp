@@ -32,10 +32,7 @@ namespace MovieApp
             return await _context.ScanAsync<Movie>(conditions).GetRemainingAsync();
         }
 
-        //public async Task<Movie> GetMovieByIdAsync(string id, string movieName)
-        //{
-        //    return await _context.LoadAsync<Movie>(id, movieName);
-        //}
+        
         public async Task<Movie> GetMovieByIdAsync(string id, string movieName)
         {
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(movieName))
@@ -61,6 +58,8 @@ namespace MovieApp
             await _context.DeleteAsync<Movie>(id, movieName);
         }
 
+        
+
         public async Task<List<Movie>> GetMoviesByRatingAsync(int minRating)
         {
             var config = new DynamoDBOperationConfig
@@ -69,12 +68,13 @@ namespace MovieApp
             };
 
             var scanConditions = new List<ScanCondition>
-            {
-                new ScanCondition("Rating", ScanOperator.GreaterThan, minRating)
-            };
+    {
+        new ScanCondition("Rating", ScanOperator.GreaterThanOrEqual, (double)minRating) // Change to GreaterThanOrEqual
+    };
 
             return await _context.ScanAsync<Movie>(scanConditions, config).GetRemainingAsync();
         }
+
 
         public async Task<List<Movie>> GetMoviesByGenreAsync(string genre)
         {

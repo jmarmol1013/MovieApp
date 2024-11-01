@@ -25,7 +25,7 @@ namespace MovieApp.Models
         public string Genre { get; set; }
 
         [DynamoDBProperty("rating")]
-        public int Rating { get; set; }
+        public double? Rating { get; set; }
 
         [DynamoDBProperty("releaseDate")]
         public DateTime ReleaseDate { get; set; }
@@ -44,5 +44,8 @@ namespace MovieApp.Models
 
         [DynamoDBProperty("userId")]
         public string UserId { get; set; }
+
+        [DynamoDBProperty("rating")]
+        public double? Rating { get; set; }
     }
 }

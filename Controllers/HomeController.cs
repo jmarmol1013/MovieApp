@@ -22,14 +22,17 @@ namespace MovieApp.Controllers
             return View();
         }
 
-        // Login
+        
+
+
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
             if (user != null)
             {
-                TempData["Username"] = username;
+                // Use Session instead of TempData
+                HttpContext.Session.SetString("Username", username);
                 return RedirectToAction("Index", "Movies");
             }
             else
@@ -37,6 +40,9 @@ namespace MovieApp.Controllers
                 return View();
             }
         }
+
+
+
 
         public IActionResult Register()
         {

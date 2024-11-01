@@ -17,7 +17,9 @@ namespace MovieApp.Controllers
             _logger = logger;
         }
 
-        
+
+       
+
         public async Task<IActionResult> Index(string genre, double? rating)
         {
             var movies = await _dynamoDbClient.GetAllMoviesAsync();
@@ -32,7 +34,7 @@ namespace MovieApp.Controllers
                 movies = movies.Where(m => m.Rating >= rating.Value).ToList();
             }
 
-            string username = TempData["Username"] as string;
+            string username = HttpContext.Session.GetString("Username"); // Updated
             var viewModel = new MoviesViewModel
             {
                 Movies = movies,
@@ -41,6 +43,10 @@ namespace MovieApp.Controllers
 
             return View(viewModel);
         }
+
+
+
+
 
 
         public async Task<IActionResult> Download(string movieId)
@@ -122,8 +128,10 @@ namespace MovieApp.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, string userId)
+        public async Task<IActionResult> AddComment(string movieId, string movieName, string content, string userId, double rating)
         {
             if (string.IsNullOrWhiteSpace(content) || string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(movieName))
             {
@@ -142,16 +150,24 @@ namespace MovieApp.Controllers
                 CommentId = Guid.NewGuid().ToString(),
                 Content = content,
                 Timestamp = DateTime.UtcNow,
-                UserId = userId
+                UserId = userId,
+                Rating = rating  // Set the rating from the input
             };
 
             movie.Comments.Add(comment);
 
+            // Calculate the new average rating
+            double averageRating = (double)movie.Comments.Average(c => c.Rating);
+            movie.Rating = Math.Round(averageRating, 1);  // Store the average rating to one decimal place
+
             // Update the movie in DynamoDB
             await _dynamoDbClient.UpdateMovieAsync(movie);
 
+
             return RedirectToAction("Index");
         }
+
+
 
         // Delete movie
         [HttpPost]
@@ -165,16 +181,41 @@ namespace MovieApp.Controllers
             return RedirectToAction("Index");
         }
 
+
+        
+
         public async Task<IActionResult> IndexByRating(int minRating)
         {
             var movies = await _dynamoDbClient.GetMoviesByRatingAsync(minRating);
-            return View("Index", movies);
+            string username = HttpContext.Session.GetString("Username"); // Use session to retrieve the username
+
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
+
+            return View("Index", viewModel); // Return the MoviesViewModel
         }
+
+
 
         public async Task<IActionResult> IndexByGenre(string genre)
         {
             var movies = await _dynamoDbClient.GetMoviesByGenreAsync(genre);
-            return View("Index", movies);
+            string username = HttpContext.Session.GetString("Username"); // Use session to retrieve the username
+
+            var viewModel = new MoviesViewModel
+            {
+                Movies = movies,
+                Username = username
+            };
+
+            return View("Index", viewModel); // Return the MoviesViewModel
         }
+
+
+  
+
     }
 }
